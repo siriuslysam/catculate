@@ -1,0 +1,18 @@
+{
+    "wet": {
+        "description":      "Complete Health Kitten Chicken Entree",
+        "age_group":        "kitten",
+        "volume_oz":        3,
+        "kcal":             97,
+        "case_qty":         24,
+        "case_price":       41.28    
+    },
+    "dry": {
+        "description":      "Complete Health Kitten Grain-Free Deboned Chicken and Chicken Meal",
+        "age_group":        "kitten",
+        "kcal_per_cup":     477,
+        "kcal_per_kg":      3907,
+        "bag_lbs":          5.5,
+        "bag_price":        21.49  
+    }
+}
