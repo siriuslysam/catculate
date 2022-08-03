@@ -1,9 +1,11 @@
 {
-    "mix": {
-        "brand":        "wellness",
-        "wet":          "half_can",
-        "dry":          "remaining",
-        "kcal_min":     275,
-        "kcal_max":     300
+    "Daikon": {
+        "mix": {
+            "brand":        "wellness",
+            "wet":          "half_can",
+            "dry":          "remaining",
+            "kcal_min":     275,
+            "kcal_max":     300
+        }
     }
 }
