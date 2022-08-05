@@ -1,9 +1,10 @@
 {
     "Daikon": {
         "mix": {
+            "age_group":    "kitten",
             "brand":        "wellness",
-            "wet":          "half_can",
-            "dry":          "remaining",
+            "wet_portion":  "half_can",
+            "dry_portion":  "remaining",
             "kcal_min":     275,
             "kcal_max":     300
         }
