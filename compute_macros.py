@@ -6,16 +6,20 @@
 __author__ = "Sam Zhao"
 __date__ = "2022-07-30 01:47:35"
 
+import os
 import json
+import csv
+from datetime import date
 from fractions import Fraction
 import util
 
 
 list_diets = ['mix','dry','wet']
+header = ['Date', 'Total Food (kcal)', 'Wet Food (kcal)', 'Dry Food (kcal)']
 
 # Read the regimen info for each cat.
 print('Preparing to compute cat macros...')
-with open('config/regimen.json') as f:
+with open('input/regimen.json') as f:
     regimen = json.load(f)
 
 # Ask for which cat to calculate macros for.
@@ -49,7 +53,11 @@ kcal_max = regimen[name][diet]['kcal_max']
 
 # Switch case to compute macros for specific diet.
 if diet == 'mix':
-    # Open nutritional facts from configured food.
+    # Open nutritional facts from inputured food.
+    if os.path.isfile('foods/'+ regimen[name][diet]['brand'] +'.json'):
+        pass
+    else:
+        raise Exception('Food json for {} does not exist'.format(regimen[name][diet]['brand']))
     with open('foods/'+ regimen[name][diet]['brand'] +'.json') as f:
         food = json.load(f)
 
@@ -78,6 +86,9 @@ if diet == 'mix':
             dry_cup = dry_cup_max_near
         else:
             dry_cup = dry_cup_min_near
+
+    dry_kcal = dry_cup * dry_kcal_per_cup
+    total_kcal = wet_kcal + dry_kcal
 elif diet == 'wet':
     pass
 elif diet == 'dry':
@@ -104,3 +115,28 @@ elif diet == 'dry':
     print('Breakfast: {} cup{}'.format((Fraction(dry_cup/3.0)),util.add_s(dry_cup/3.0)))
     print('Dinner: {} cup{}'.format((Fraction(dry_cup/3.0)),util.add_s(dry_cup/3.0)))
     print('Midnight: {} cup{}'.format((Fraction(dry_cup/3.0)),util.add_s(dry_cup/3.0)))
+
+# Create the data csv if it doesn't exist.
+macro_file = 'data/macros.csv'
+if not os.path.isdir('data'):
+    os.mkdir('data')
+if not os.path.isfile(macro_file):
+    with open(macro_file, 'w') as f:
+        writer = csv.writer(f)
+        writer.writerow(header)
+
+# Log the data, but skip if it's the same as the last entry.
+last_line = util.get_last_line(macro_file)
+with open(macro_file, 'a') as f:
+    writer = csv.writer(f)
+    data = [total_kcal, wet_kcal, dry_kcal]
+    if [elem.replace('\r\n','') for elem in last_line.split(',')] == header:
+        today = date.today()
+        data.insert(0,today.strftime("%Y-%m-%d"))
+        writer.writerow(data)
+    else:
+        last_data = [float(elem.replace('\r\n','')) for elem in last_line.split(',')[1:]]
+        if data != last_data:
+            today = date.today()
+            data.insert(0,today.strftime("%Y-%m-%d"))
+            writer.writerow(data)
