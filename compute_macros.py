@@ -13,7 +13,6 @@ from datetime import date
 from fractions import Fraction
 import util
 
-
 list_diets = ['mix','dry','wet']
 header = ['Date', 'Total Food (kcal)', 'Wet Food (kcal)', 'Dry Food (kcal)']
 
@@ -130,12 +129,12 @@ last_line = util.get_last_line(macro_file)
 with open(macro_file, 'a') as f:
     writer = csv.writer(f)
     data = [total_kcal, wet_kcal, dry_kcal]
-    if [elem.replace('\r\n','') for elem in last_line.split(',')] == header:
+    if [util.delete_tails(elem) for elem in last_line.split(',')] == header:
         today = date.today()
         data.insert(0,today.strftime("%Y-%m-%d"))
         writer.writerow(data)
     else:
-        last_data = [float(elem.replace('\r\n','')) for elem in last_line.split(',')[1:]]
+        last_data = [float(util.delete_tails(elem)) for elem in last_line.split(',')[1:]]
         if data != last_data:
             today = date.today()
             data.insert(0,today.strftime("%Y-%m-%d"))

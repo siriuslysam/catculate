@@ -9,6 +9,8 @@ __date__ = "2022-08-05 02:11:36"
 import os
 
 
+list_terminators = ['\r', '\n']
+
 def round_nearest(x, a):
     """Round the number to the nearest desired interval.
     
@@ -55,3 +57,16 @@ def get_last_line(file):
         except OSError:
             file.seek(0)
         return file.readline().decode()
+
+def delete_tails(string):
+    """Delete line terminators from data files.
+
+    :param string: String to be parsed.
+    :type string: str
+    :return: New string without line terminators
+    :rtype: str
+    
+    """
+    for tail in list_terminators:
+        string = string.replace(tail,'')
+    return string
