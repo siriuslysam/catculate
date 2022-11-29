@@ -9,7 +9,9 @@ __date__ = "2022-08-05 02:11:36"
 import os
 
 
-list_terminators = ['\r', '\n']
+TERMINATORS = ['\r', '\n']
+LB_TO_KG = 0.45359237
+DIETS = ['mix','dry','wet']
 
 def round_nearest(x, a):
     """Round the number to the nearest desired interval.
@@ -23,7 +25,6 @@ def round_nearest(x, a):
     """
     return round(x / a) * a
 
-
 def add_s(num):
     """Output a plural 's' if the value is more than 1.
 
@@ -36,7 +37,6 @@ def add_s(num):
         return 's'
     else:
         return ''
-
 
 def get_last_line(file):
     """Get the last line of a file like csv.
@@ -67,6 +67,9 @@ def delete_tails(string):
     :rtype: str
     
     """
-    for tail in list_terminators:
+    for tail in TERMINATORS:
         string = string.replace(tail,'')
     return string
+
+def parse_line(string):
+    return [delete_tails(elem) for elem in string.split(',')]

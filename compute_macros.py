@@ -13,7 +13,7 @@ from datetime import date
 from fractions import Fraction
 import util
 
-list_diets = ['mix','dry','wet']
+
 header = ['Date', 'Total Food (kcal)', 'Wet Food (kcal)', 'Dry Food (kcal)']
 
 # Read the regimen info for each cat.
@@ -33,7 +33,7 @@ else:
 # Check if regimen contains a valid diet.
 # Then ask for which diet type to choose: mix, dry, or wet.
 diets = list(regimen[name].keys())
-diet_check = all(diet in list_diets for diet in diets)
+diet_check = all(diet in util.DIETS for diet in diets)
 if diet_check is not True:
     raise KeyError('A diet in regimen.json is invalid. The choices are mix, dry, or wet. Verify and try again.')
 if len(diets) != 1:
@@ -120,13 +120,13 @@ macro_file = 'data/macros.csv'
 if not os.path.isdir('data'):
     os.mkdir('data')
 if not os.path.isfile(macro_file):
-    with open(macro_file, 'w') as f:
+    with open(macro_file, 'w', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(header)
 
 # Log the data, but skip if it's the same as the last entry.
 last_line = util.get_last_line(macro_file)
-with open(macro_file, 'a') as f:
+with open(macro_file, 'a', newline='') as f:
     writer = csv.writer(f)
     data = [total_kcal, wet_kcal, dry_kcal]
     if [util.delete_tails(elem) for elem in last_line.split(',')] == header:
