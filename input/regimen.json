@@ -3,7 +3,8 @@
         "mix": {
             "age_group":    "kitten",
             "brand":        "wellness",
-            "wet_portion":  "half_can",
+            "wet_can_type": "5.5",
+            "wet_portion":  "full_can",
             "dry_portion":  "remaining",
             "kcal_min":     275,
             "kcal_max":     300

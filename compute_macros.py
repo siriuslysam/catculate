@@ -13,7 +13,7 @@ from datetime import date
 from fractions import Fraction
 import util
 
-list_diets = ['mix','dry','wet']
+list_diets = ['mix','dry','wet_3','wet_5.5']
 header = ['Date', 'Total Food (kcal)', 'Wet Food (kcal)', 'Dry Food (kcal)']
 
 # Read the regimen info for each cat.
@@ -35,16 +35,17 @@ else:
 diets = list(regimen[name].keys())
 diet_check = all(diet in list_diets for diet in diets)
 if diet_check is not True:
-    raise KeyError('A diet in regimen.json is invalid. The choices are mix, dry, or wet. Verify and try again.')
+    raise KeyError('A diet in regimen.json is invalid. The choices are mix, dry, wet_3, or wet_5.5. Verify and try again.')
 if len(diets) != 1:
     diet = input('Which diet do you choose: {}? '.format(', '.join('{}'.format(diet) for diet in diets)))
     if diet not in diets:
-        raise ValueError('The diet is not listed in regimen.json. The choices are mix, dry, or wet. Verify and try again.')
+        raise ValueError('The diet is not listed in regimen.json. The choices are mix, dry, wet_3, or wet_5.5. Verify and try again.')
 else:
     diet = diets[0]
 
 # Make some varaibles from regimen dict.
 age_group = regimen[name][diet]['age_group']
+wet_can_type = regimen[name][diet]['wet_can_type']
 wet_portion = regimen[name][diet]['wet_portion']
 dry_portion = regimen[name][diet]['dry_portion']
 kcal_min = regimen[name][diet]['kcal_min']
@@ -61,12 +62,18 @@ if diet == 'mix':
         food = json.load(f)
 
     # Compute wet food potion.
-    wet_kcal = food[age_group]['wet']['kcal']
-    if wet_portion == 'half_can':
-        wet_kcal /= 2.0
-        wet_can = 0.5
-    elif wet_portion == 'full_can':
-        wet_can = 1.0
+    match wet_can_type:
+        case '3':
+            wet_kcal = food[age_group]['wet_3']['kcal']
+        case '5.5':
+            wet_kcal = food[age_group]['wet_5.5']['kcal']
+
+    match wet_portion:
+        case 'half_can':
+            wet_kcal /= 2.0
+            wet_can = 0.5
+        case 'full_can':
+            wet_can = 1.0
 
     # Compute dry food portion by finding the range of calories.
     dry_kcal_per_cup = food[age_group]['dry']['kcal_per_cup']
@@ -75,8 +82,8 @@ if diet == 'mix':
         dry_cup_max = (kcal_max - wet_kcal) / dry_kcal_per_cup
 
         # Choose the closest quarter-cup portion.
-        dry_cup_min_near = util.round_nearest(dry_cup_min, 0.25)
-        dry_cup_max_near = util.round_nearest(dry_cup_max, 0.25)
+        dry_cup_min_near = util.round_nearest(dry_cup_min, util.SMALLEST_CUP)
+        dry_cup_max_near = util.round_nearest(dry_cup_max, util.SMALLEST_CUP)
 
         dry_cup_min_err = abs(dry_cup_min_near - dry_cup_min)
         dry_cup_max_err = abs(dry_cup_max_near - dry_cup_max)
@@ -116,7 +123,7 @@ elif diet == 'dry':
     print('Midnight: {} cup{}'.format((Fraction(dry_cup/3.0)),util.add_s(dry_cup/3.0)))
 
 # Create the data csv if it doesn't exist.
-macro_file = 'data/macros.csv'
+macro_file = 'data/' + name.lower() + '_macros.csv'
 if not os.path.isdir('data'):
     os.mkdir('data')
 if not os.path.isfile(macro_file):

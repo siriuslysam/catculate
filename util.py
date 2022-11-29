@@ -9,7 +9,8 @@ __date__ = "2022-08-05 02:11:36"
 import os
 
 
-list_terminators = ['\r', '\n']
+LIST_TERMINATORS = ['\r', '\n']
+SMALLEST_CUP = 0.0625
 
 def round_nearest(x, a):
     """Round the number to the nearest desired interval.
@@ -67,6 +68,6 @@ def delete_tails(string):
     :rtype: str
     
     """
-    for tail in list_terminators:
+    for tail in LIST_TERMINATORS:
         string = string.replace(tail,'')
     return string
