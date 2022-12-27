@@ -1,18 +1,21 @@
 {
-    "wet": {
-        "description":      "Mother & Babycat Ultra Soft Mousse in Sauce",
-        "age_group":        "kitten",
-        "volume_oz":        3,
-        "kcal":             72.55,
-        "case_qty":         24,
-        "case_price":       47.76    
-    },
-    "dry": {
-        "description":      "Mother & Babycat Dry",
-        "age_group":        "kitten",
-        "kcal_per_cup":     479,
-        "kcal_per_kg":      4236,
-        "bag_lbs":          3.5,
-        "bag_price":        24.99  
+    "kitten": {
+        "wet_3": {
+            "description":      "Mother & Babycat Ultra Soft Mousse in Sauce 3 oz",
+            "age_group":        "kitten",
+            "volume_oz":        3,
+            "kcal":             72.55,
+            "case_qty":         24,
+            "case_price":       47.76    
+        },
+        "dry": {
+            "description":      "Mother & Babycat Dry",
+            "age_group":        "kitten",
+            "kcal_per_cup":     479,
+            "kcal_per_kg":      4236,
+            "bag_lbs":          3.5,
+            "bag_price":        24.99  
+        }
     }
+    
 }

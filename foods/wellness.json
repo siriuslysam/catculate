@@ -1,11 +1,18 @@
 {
     "kitten": {
-        "wet": {
-            "description":      "Complete Health Kitten Chicken Entree",
+        "wet_3": {
+            "description":      "Complete Health Kitten Chicken Entree 3 oz",
             "volume_oz":        3,
-            "kcal":             97,
+            "kcal":             105,
             "case_qty":         24,
             "case_price":       41.28    
+        },
+        "wet_5.5": {
+            "description":      "Complete Health Kitten Chicken Entree 5.5 oz",
+            "volume_oz":        5.5,
+            "kcal":             193,
+            "case_qty":         24,
+            "case_price":       63.00    
         },
         "dry": {
             "description":      "Complete Health Kitten Grain-Free Deboned Chicken and Chicken Meal",

@@ -3,6 +3,7 @@
         "mix": {
             "age_group":    "adult",
             "brand":        "hills_science_diet",
+            "wet_can_type": "5.5",
             "wet_portion":  "half_can",
             "dry_portion":  "remaining",
             "kcal_min":     220,

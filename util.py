@@ -12,6 +12,7 @@ import os
 TERMINATORS = ['\r', '\n']
 LB_TO_KG = 0.45359237
 DIETS = ['mix','dry','wet']
+SMALLEST_CUP = 0.0625
 
 def round_nearest(x, a):
     """Round the number to the nearest desired interval.
