@@ -1,0 +1,18 @@
+{
+    "adult": {
+        "wet": {
+            "description":      "Adult Indoor Savory Chicken Entree",
+            "volume_oz":        5.5,
+            "kcal":             170,
+            "case_qty":         24,
+            "case_price":       52.08    
+        },
+        "dry": {
+            "description":      "Adult Indoor Chicken Recipe",
+            "kcal_per_cup":     319,
+            "kcal_per_kg":      3515,
+            "bag_lbs":          15.5,
+            "bag_price":        49.99  
+        }
+    }
+}

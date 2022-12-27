@@ -1,12 +1,12 @@
 {
     "Daikon": {
         "mix": {
-            "age_group":    "kitten",
-            "brand":        "wellness",
+            "age_group":    "adult",
+            "brand":        "hills_science_diet",
             "wet_portion":  "half_can",
             "dry_portion":  "remaining",
-            "kcal_min":     275,
-            "kcal_max":     300
+            "kcal_min":     220,
+            "kcal_max":     240
         }
     }
 }

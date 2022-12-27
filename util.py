@@ -65,7 +65,6 @@ def delete_tails(string):
     :type string: str
     :return: New string without line terminators
     :rtype: str
-    
     """
     for tail in TERMINATORS:
         string = string.replace(tail,'')

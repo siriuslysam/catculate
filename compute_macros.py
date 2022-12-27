@@ -15,9 +15,10 @@ import util
 
 
 header = ['Date', 'Total Food (kcal)', 'Wet Food (kcal)', 'Dry Food (kcal)']
+min_frac = 1/8
 
 # Read the regimen info for each cat.
-print('Preparing to compute cat macros...')
+print('Computing cat macros...')
 with open('input/regimen.json') as f:
     regimen = json.load(f)
 
@@ -65,6 +66,9 @@ if diet == 'mix':
     if wet_portion == 'half_can':
         wet_kcal /= 2.0
         wet_can = 0.5
+    elif wet_portion == 'third_can':
+        wet_kcal /= 3.0
+        wet_can = 1/3
     elif wet_portion == 'full_can':
         wet_can = 1.0
 
@@ -74,9 +78,9 @@ if diet == 'mix':
         dry_cup_min = (kcal_min - wet_kcal) / dry_kcal_per_cup
         dry_cup_max = (kcal_max - wet_kcal) / dry_kcal_per_cup
 
-        # Choose the closest quarter-cup portion.
-        dry_cup_min_near = util.round_nearest(dry_cup_min, 0.25)
-        dry_cup_max_near = util.round_nearest(dry_cup_max, 0.25)
+        # Choose the closest fractional cup portion.
+        dry_cup_min_near = util.round_nearest(dry_cup_min, min_frac)
+        dry_cup_max_near = util.round_nearest(dry_cup_max, min_frac)
 
         dry_cup_min_err = abs(dry_cup_min_near - dry_cup_min)
         dry_cup_max_err = abs(dry_cup_max_near - dry_cup_max)
@@ -95,25 +99,25 @@ elif diet == 'dry':
 
 # Print computed macros.
 print("\n***** {}'s Daily Macros *****".format(name))
-print('- Total Feeding')
+print('- Total Feeding for {:0.2f} kcal'.format(total_kcal))
 if diet in ['mix','wet']:
-    print('Wet food: {} can{}'.format((Fraction(wet_can)),util.add_s(wet_can)))
+    print('Wet food: {} can{}'.format(Fraction(wet_can),util.add_s(wet_can)))
 if diet in ['mix','dry']:
-    print('Dry food: {} cup{}'.format(str(Fraction(dry_cup)),util.add_s(dry_cup)))
+    print('Dry food: {} cup{}'.format(Fraction(dry_cup),util.add_s(dry_cup)))
 
 print('\n- Suggested Meals')
 if diet == 'mix':
-    print('Breakfast: {} cup{}'.format(str(Fraction(dry_cup/2.0)),util.add_s(dry_cup/2.0)))
-    print('Dinner: {} can{}'.format((Fraction(wet_can)),util.add_s(wet_can)))
-    print('Midnight: {} cup{}'.format(str(Fraction(dry_cup/2.0)),util.add_s(dry_cup/2.0)))
+    print('Breakfast: {} cup{}'.format(Fraction(dry_cup/2.0),util.add_s(dry_cup/2.0)))
+    print('Dinner: {} can{}'.format(Fraction(wet_can),util.add_s(wet_can)))
+    print('Midnight: {} cup{}'.format(Fraction(dry_cup/2.0),util.add_s(dry_cup/2.0)))
 elif diet == 'wet':
-    print('Breakfast: {} can{}'.format((Fraction(wet_can/3.0)),util.add_s(wet_can/3.0)))
-    print('Dinner: {} can{}'.format((Fraction(wet_can/3.0)),util.add_s(wet_can/3.0)))
-    print('Midnight: {} can{}'.format((Fraction(wet_can/3.0)),util.add_s(wet_can/3.0)))
+    print('Breakfast: {} can{}'.format(Fraction(wet_can/3.0),util.add_s(wet_can/3.0)))
+    print('Dinner: {} can{}'.format(Fraction(wet_can/3.0),util.add_s(wet_can/3.0)))
+    print('Midnight: {} can{}'.format(Fraction(wet_can/3.0),util.add_s(wet_can/3.0)))
 elif diet == 'dry':
-    print('Breakfast: {} cup{}'.format((Fraction(dry_cup/3.0)),util.add_s(dry_cup/3.0)))
-    print('Dinner: {} cup{}'.format((Fraction(dry_cup/3.0)),util.add_s(dry_cup/3.0)))
-    print('Midnight: {} cup{}'.format((Fraction(dry_cup/3.0)),util.add_s(dry_cup/3.0)))
+    print('Breakfast: {} cup{}'.format(Fraction(dry_cup/3.0),util.add_s(dry_cup/3.0)))
+    print('Dinner: {} cup{}'.format(Fraction(dry_cup/3.0),util.add_s(dry_cup/3.0)))
+    print('Midnight: {} cup{}'.format(Fraction(dry_cup/3.0),util.add_s(dry_cup/3.0)))
 
 # Create the data csv if it doesn't exist.
 macro_file = 'data/macros.csv'
