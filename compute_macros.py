@@ -15,7 +15,6 @@ import util
 
 
 header = ['Date', 'Total Food (kcal)', 'Wet Food (kcal)', 'Dry Food (kcal)']
-min_frac = 1/8
 
 # Read the regimen info for each cat.
 print('Computing cat macros...')
@@ -86,8 +85,8 @@ if diet == 'mix':
         dry_cup_max = (kcal_max - wet_kcal) / dry_kcal_per_cup
 
         # Choose the closest fractional cup portion.
-        dry_cup_min_near = util.round_nearest(dry_cup_min, min_frac)
-        dry_cup_max_near = util.round_nearest(dry_cup_max, min_frac)
+        dry_cup_min_near = util.round_nearest(dry_cup_min, util.SMALLEST_CUP)
+        dry_cup_max_near = util.round_nearest(dry_cup_max, util.SMALLEST_CUP)
 
         dry_cup_min_err = abs(dry_cup_min_near - dry_cup_min)
         dry_cup_max_err = abs(dry_cup_max_near - dry_cup_max)
@@ -108,19 +107,19 @@ elif diet == 'dry':
 print("\n***** {}'s Daily Macros *****".format(name))
 print('- Total Feeding for {:0.2f} kcal'.format(total_kcal))
 if diet in ['mix','wet']:
-    print('Wet food: {} can{}'.format(Fraction(wet_can),util.add_s(wet_can)))
+    print('Wet food: {} can{}'.format(Fraction(wet_can).limit_denominator(max_denominator=100),util.add_s(wet_can)))
 if diet in ['mix','dry']:
     print('Dry food: {} cup{}'.format(Fraction(dry_cup),util.add_s(dry_cup)))
 
 print('\n- Suggested Meals')
 if diet == 'mix':
     print('Breakfast: {} cup{}'.format(Fraction(dry_cup/2.0),util.add_s(dry_cup/2.0)))
-    print('Dinner: {} can{}'.format(Fraction(wet_can),util.add_s(wet_can)))
+    print('Dinner: {} can{}'.format(Fraction(wet_can).limit_denominator(max_denominator=100),util.add_s(wet_can)))
     print('Midnight: {} cup{}'.format(Fraction(dry_cup/2.0),util.add_s(dry_cup/2.0)))
 elif diet == 'wet':
-    print('Breakfast: {} can{}'.format(Fraction(wet_can/3.0),util.add_s(wet_can/3.0)))
-    print('Dinner: {} can{}'.format(Fraction(wet_can/3.0),util.add_s(wet_can/3.0)))
-    print('Midnight: {} can{}'.format(Fraction(wet_can/3.0),util.add_s(wet_can/3.0)))
+    print('Breakfast: {} can{}'.format(Fraction(wet_can/3.0).limit_denominator(max_denominator=100),util.add_s(wet_can/3.0)))
+    print('Dinner: {} can{}'.format(Fraction(wet_can/3.0).limit_denominator(max_denominator=100),util.add_s(wet_can/3.0)))
+    print('Midnight: {} can{}'.format(Fraction(wet_can/3.0).limit_denominator(max_denominator=100),util.add_s(wet_can/3.0)))
 elif diet == 'dry':
     print('Breakfast: {} cup{}'.format(Fraction(dry_cup/3.0),util.add_s(dry_cup/3.0)))
     print('Dinner: {} cup{}'.format(Fraction(dry_cup/3.0),util.add_s(dry_cup/3.0)))
@@ -140,6 +139,8 @@ last_line = util.get_last_line(macro_file)
 with open(macro_file, 'a', newline='') as f:
     writer = csv.writer(f)
     data = [total_kcal, wet_kcal, dry_kcal]
+    for i, datum in enumerate(data):
+        data[i] = '{:0.2f}'.format(datum)
     if [util.delete_tails(elem) for elem in last_line.split(',')] == header:
         today = date.today()
         data.insert(0,today.strftime("%Y-%m-%d"))
